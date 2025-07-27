@@ -1,16 +1,20 @@
 import Link from 'next/link';
-import { Suspense } from 'react';
+import { headers } from 'next/headers';
 
 interface Post {
   _id: string;
   title: string;
   content: string;
-  slug: string;
   createdAt: string;
+  slug: string;
+  published: boolean;
 }
 
 async function getPosts(): Promise<Post[]> {
-  const res = await fetch('/api/posts', { next: { revalidate: 60 } });
+  const headersList = headers();
+  const host = headersList.get('host') || 'localhost:3000';
+  const protocol = process.env.NODE_ENV === 'production' ? 'https' : 'http';
+  const res = await fetch(`${protocol}://${host}/api/posts`, { next: { revalidate: 60 } });
   if (!res.ok) throw new Error('Failed to fetch posts');
   return res.json();
 }
@@ -35,7 +39,7 @@ function PostCard({ post }: { post: Post }) {
         href={`/posts/${post.slug}`}
         className="text-blue-600 hover:text-blue-800 font-medium"
       >
-        Read more →
+        阅读更多 →
       </Link>
     </article>
   );
@@ -45,13 +49,13 @@ export default function Home() {
   return (
     <main className="container mx-auto px-4 py-8 max-w-4xl">
       <header className="text-center mb-12">
-        <h1 className="text-4xl font-bold mb-4">My Personal Blog</h1>
+        <h1 className="text-4xl font-bold mb-4">我的个人博客</h1>
         <p className="text-gray-600 text-lg">
-          Thoughts, tutorials, and ideas about programming and web development
+          关于编程和Web开发的思考、教程和想法
         </p>
       </header>
 
-      <Suspense fallback={<div>Loading posts...</div>}>
+      <Suspense fallback={<div>加载文章中...</div>}>
         <PostsSection />
       </Suspense>
     </main>
@@ -64,8 +68,8 @@ async function PostsSection() {
   if (posts.length === 0) {
     return (
       <div className="text-center py-12">
-        <h2 className="text-2xl font-medium mb-4">No posts yet</h2>
-        <p className="text-gray-500">Check back later for new content!</p>
+        <h2 className="text-2xl font-medium mb-4">暂无文章</h2>
+        <p className="text-gray-500">敬请期待新内容！</p>
       </div>
     );
   }
