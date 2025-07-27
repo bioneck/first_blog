@@ -12,7 +12,7 @@ interface Post {
 }
 
 async function getPosts(): Promise<Post[]> {
-  const headersList = headers();
+  const headersList = await headers();
   const host = headersList.get('host') || 'localhost:3000';
   const protocol = process.env.NODE_ENV === 'production' ? 'https' : 'http';
   const res = await fetch(`${protocol}://${host}/api/posts`, { next: { revalidate: 60 } });

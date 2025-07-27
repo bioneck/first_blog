@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
@@ -21,7 +22,7 @@ export default function AdminDashboard() {
       try {
         const response = await fetch('/api/admin/posts');
         if (!response.ok) throw new Error('Failed to fetch posts');
-        const data = await response.json();
+        const data = await response.json() as Post[];
         setPosts(data);
       } catch (err) {
         console.error('Error fetching posts:', err);
@@ -57,18 +58,17 @@ return (
       <h1 className="text-3xl font-bold">Admin Dashboard</h1>
       <Link
         href="/admin/new"
-        className="bg-green-600 text-white px-４ py-2 rounded-md hover:bg-green-700"
+        className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700"
       >
-        Create New Post
+        创建新文章
       </Link>
     </div>
 
     {error && (
-      <div className="bg-red-１００ text-red-700 p－3 rounded mb-4">{error}</div>
-)}     
+      <div className="bg-red-100 text-red-700 p-3 rounded mb-4">{error}</div>  )}
 
-    {posts.length ===０ ? (
-      <p>No posts found.</p>
+    {posts.length === 0 ? (
+      <p>没有找到文章。</p>
     ) : (
       <div className="overflow-x-auto">
         <table className="min-w-full bg-white">

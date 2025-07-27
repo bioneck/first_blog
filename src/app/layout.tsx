@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { ThemeProvider, Navbar, NavMenu, NavItem } from '@heroui/react';
+import Link from 'next/link';
 import "./globals.css";
+import '@heroui/react/dist/styles.css';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -25,10 +28,19 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
-      </body>
+  className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+>
+  <ThemeProvider>
+    <Navbar>
+      <NavMenu>
+        <NavItem as={Link} href="/">主页</NavItem>
+        <NavItem as={Link} href="/posts">文章</NavItem>
+        <NavItem as={Link} href="/about">关于我</NavItem>
+      </NavMenu>
+    </Navbar>
+    {children}
+  </ThemeProvider>
+</body>
     </html>
   );
 }

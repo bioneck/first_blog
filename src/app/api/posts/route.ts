@@ -8,7 +8,7 @@ export async function GET() {
     const posts = await Post.find({ published: true }).sort({ createdAt: -1 });
     return NextResponse.json(posts);
   } catch (error) {
-    console.error('Error fetching posts:', error);
+    console.error('Database connection error:', error);
     return NextResponse.json(
       { error: 'Failed to fetch posts' },
       { status: 500 }
