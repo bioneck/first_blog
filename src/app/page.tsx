@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { Suspense } from 'react';
 import { headers } from 'next/headers';
 
 interface Post {
@@ -16,7 +17,7 @@ async function getPosts(): Promise<Post[]> {
   const protocol = process.env.NODE_ENV === 'production' ? 'https' : 'http';
   const res = await fetch(`${protocol}://${host}/api/posts`, { next: { revalidate: 60 } });
   if (!res.ok) throw new Error('Failed to fetch posts');
-  return res.json();
+  return res.json() as Promise<Post[]>;
 }
 
 function PostCard({ post }: { post: Post }) {

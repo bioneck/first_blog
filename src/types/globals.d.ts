@@ -2,7 +2,7 @@ import type mongoose from 'mongoose';
 
 declare global {
   var mongoose: {
-    conn: mongoose.Connection | null;
-    promise: Promise<mongoose.Connection> | null;
+    conn: typeof mongoose | null;
+    promise: Promise<typeof mongoose> | null;
   };
 }
